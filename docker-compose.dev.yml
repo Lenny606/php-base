@@ -11,14 +11,24 @@ services:
   app:
     build:
       dockerfile: infrastructure/php/Dockerfile
+#      target multistage build - dev
+      target: app_dev
     volumes:
       - ./app:/var/www/html
+#     :ro => readonly
+      - ./infrastructure/php/conf.d/xdebug.ini:/user/local/etc/php/conf.d/xdebug.ini:ro
     environment:
       MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
       #      MYSQL_USER: root
       MYSQL_PASSWORD: $MYSQL_PASSWORD
       MYSQL_DATABASE: $MYSQL_DATABASE
       MYSQL_HOST: $MYSQL_HOST
+      REDIS_HOST: cache
+      REDIS_PORT: ${REDIS_PORT}
+#      deafault value
+      XDEBUG_MODE: ${XDEBUG_MODE:-off}
+    extra_hosts:
+      - host.docker.internal:host-gateway
   db:
     image: mysql:8.0
     volumes:
@@ -31,7 +41,9 @@ services:
 #      MYSQL_USER: root
       MYSQL_PASSWORD: secret
       MYSQL_DATABASE: docker-php
-
+#  redis => check default port in docker ps
+  cache:
+    image: redis:latest
 
 #default , docker will handle
 volumes:

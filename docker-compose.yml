@@ -12,6 +12,8 @@ services:
   app:
     build:
       dockerfile: infrastructure/php/Dockerfile
+#      target multistage build - prod
+      target: app
   db:
     image: mysql:8.0
     volumes:

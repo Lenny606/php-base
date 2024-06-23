@@ -1,7 +1,10 @@
-FROM php:8.1-fpm-alpine AS base
+FROM php:8.1-fpm-alpine AS app
 
 #install php extension
 RUN docker-php-ext-install pdo pdo_mysql
+#for use with xdebug
+#RUN set -eux \
+#    install-php-extensions pdo pdo_mysql;
 
 #allow as superuser in variable
 ENV COMPOSER_ALLOW_SUPERUSER=1
@@ -19,3 +22,12 @@ COPY ./app .
 
 #run autoload
 RUN composer dump-autoload --optimize
+
+#DEV into separate img
+FROM app AS app_dev
+
+ENV XDEBUG_MODE=off
+
+COPY ./infrastructure/php/conf.d/xdebug.ini ./user/local/etc/php/conf.d/xdebug.ini
+RUN set -eux \
+    install-php-extensions xdebug;
