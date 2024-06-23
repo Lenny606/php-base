@@ -4,7 +4,30 @@ services:
     ports:
 #      local port maps containers port
       - "80:80"
+#     mapping local to container
+    volumes:
+      - ./infrastructure/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
 #  php application, custom build from Dockerfile
   app:
     build:
       dockerfile: infrastructure/php/Dockerfile
+    volumes:
+      - /var/www/html/vendor
+      - ./app:/var/www/html
+  db:
+    image: mysql:8.0
+    volumes:
+      - mysqldata:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+#      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
+      MYSQL_DATABASE: docker-php
+
+
+#default , docker will handle
+volumes:
+  mysqldata:
