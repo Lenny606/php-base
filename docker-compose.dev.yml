@@ -12,7 +12,7 @@ services:
     build:
       dockerfile: infrastructure/php/Dockerfile
 #      target multistage build - dev
-      target: app_dev
+      target: "${BUILD_TARGET:-app}"
     volumes:
       - ./app:/var/www/html
 #     :ro => readonly
