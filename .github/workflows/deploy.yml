@@ -16,8 +16,8 @@ jobs:
 #      - name: Run Tests
 #        working-directory: ./app
 #        run: composer run-phpunit
-      - run: docker build --target app -t Lenny606/php-docker:1.0 -f ./infrastructure/php/Dockerfile .
-      - run: docker build -t Lenny606/nginx-docker:1.0 -f ./infrastructure/nginx/Dockerfile .
+      - run: docker build --target app -t lenny606/php-docker:1.0 -f ./infrastructure/php/Dockerfile .
+      - run: docker build -t lenny606/nginx-docker:1.0 -f ./infrastructure/nginx/Dockerfile .
       - run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-      - run: docker push Lenny606/php-docker:1.0
-      - run: docker push Lenny606/nginx-docker:1.0
+      - run: docker push lenny606/php-docker:1.0
+      - run: docker push lenny606/nginx-docker:1.0
